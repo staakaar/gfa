@@ -1,15 +1,15 @@
-use std::process::{self, Command};
 use clap::Parser;
 use rustyline::{Editor, DefaultEditor, error::ReadlineError};
 
 #[derive(Parser)]
 struct Curl {
     url: String,
+    options: Vec<String>
 }
 
 const ICURL_INPUT_URL: &str = r#" \n URLを入力してください"#;
 
-const INPUT_HTTP_METHOD = r#" \n 利用するHTTPメソッドを選択してください。
+const INPUT_HTTP_METHOD: &str = r#" \n 利用するHTTPメソッドを選択してください。
 
     POST => 1
     PUT => 2
@@ -24,8 +24,9 @@ fn main()  {
     icurl_start();
     let mut url = input_url();
     // HTTPメソッドを選択させる
-    let http_option = input_http();
+    let http_method = input_http();
     // オプション周りを標準出力する
+    let curl_option = input_option();
     // POSTの場合はデータを入力させる
     // 最後にjpを利用して最終的に実行するcurlコマンドの内容を出力
     // 問題なければ実行　問題あれば　該当の箇所の編集ができるようにする
@@ -74,4 +75,8 @@ fn input_http() -> Result<String, ReadlineError> {
     };
 
     Ok(http_method.to_owned())
+}
+
+fn input_option() -> Result<String, ReadlineError> {
+    Ok(())
 }
