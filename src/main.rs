@@ -18,6 +18,8 @@ const INPUT_HTTP_METHOD: &str = r#" \n 利用するHTTPメソッドを選択し�
     >> 
 "#;
 
+const INPUT_CURL_OPTION: &str = r#" \n 利用するオプションを選択してください。"#;
+
 fn main()  {
     // icurlコマンド実行
     // url入力
@@ -77,6 +79,21 @@ fn input_http() -> Result<String, ReadlineError> {
     Ok(http_method.to_owned())
 }
 
-fn input_option() -> Result<String, ReadlineError> {
-    Ok(())
+///
+/// curlコマンドのオプション
+/// 
+fn input_option() -> Result<Vec<String>, ReadlineError> {
+    let mut rustyline = DefaultEditor::new()?;
+    let options: Vec<String> = vec![];
+
+    let mut readline = rustyline.readline(INPUT_CURL_OPTION);
+    // loopで回す
+    match readline {
+        Ok(ReadlineError) => options.push(readline),
+        Err(ReadlineError::Interrupted) => println!("CTRL-Cが入力されたためプログラムを終了しました。"),
+        Err(_) => print!("エラー")
+    };
+
+
+    Ok(options)
 }
