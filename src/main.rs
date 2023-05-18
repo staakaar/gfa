@@ -1,3 +1,5 @@
+use std::process;
+
 use clap::Parser;
 use rustyline::{Editor, DefaultEditor, error::ReadlineError};
 
@@ -58,21 +60,25 @@ fn input_http() -> Result<String, ReadlineError> {
 
     let readline = rustyline.readline(INPUT_HTTP_METHOD);
     let http_method = match readline {
-        Ok(line) => {
-            match line.trim() {
+        Ok(readline) => {
+            match readline.trim() {
                 "1" => "-X POST",
                 "2" => "-X PUT",
                 "3" => "-X DELETE",
+                _ => process::exit(1)
             }
         },
         Err(ReadlineError::Interrupted) => {
             println!("CTRL-C");
-        },
+            process::exit(1);
+        }
         Err(ReadlineError::Eof) => {
             println!("CTRL-D");
+            process::exit(1);
         },
         Err(err) => {
             println!("Error: {:?}", err);
+            process::exit(1);
         }
     };
 
@@ -84,16 +90,26 @@ fn input_http() -> Result<String, ReadlineError> {
 /// 
 fn input_option() -> Result<Vec<String>, ReadlineError> {
     let mut rustyline = DefaultEditor::new()?;
-    let options: Vec<String> = vec![];
+    let mut options: Vec<String> = vec![];
 
-    let mut readline = rustyline.readline(INPUT_CURL_OPTION);
-    // loopで回す
-    match readline {
-        Ok(ReadlineError) => options.push(readline),
-        Err(ReadlineError::Interrupted) => println!("CTRL-Cが入力されたためプログラムを終了しました。"),
-        Err(_) => print!("エラー")
-    };
-
+    loop {
+        let readline = rustyline.readline(INPUT_CURL_OPTION);
+        // loopで回す
+        match readline {
+            Ok(readline) => {
+                options.push(readline);
+                break;
+            }
+            Err(ReadlineError::Interrupted) => {
+                println!("CTRL-Cが入力されたためプログラムを終了しました。");
+                break;
+            }
+            Err(_) => {
+                println!("エラー");
+                break;
+            }
+        };
+    }
 
     Ok(options)
 }
