@@ -1,13 +1,7 @@
 use std::process;
 
 use clap::Parser;
-use rustyline::{Editor, DefaultEditor, error::ReadlineError};
-
-#[derive(Parser)]
-struct Curl {
-    url: String,
-    options: Vec<String>
-}
+use rustyline::{DefaultEditor, error::ReadlineError};
 
 const ICURL_INPUT_URL: &str = r#" \n URLを入力してください"#;
 
@@ -22,15 +16,26 @@ const INPUT_HTTP_METHOD: &str = r#" \n 利用するHTTPメソッドを選択し�
 
 const INPUT_CURL_OPTION: &str = r#" \n 利用するオプションを選択してください。"#;
 
+#[derive(PartialEq, Clone, Debug)]
+pub enum ParamKind {
+    Json,
+    File,
+    UrlEncode,
+}
+
 fn main()  {
     // icurlコマンド実行
     // url入力
     icurl_start();
-    let mut url = input_url();
+    let url = input_url();
     // HTTPメソッドを選択させる
     let http_method = input_http();
     // オプション周りを標準出力する
     let curl_option = input_option();
+    // パラメーターの種類を選択させる
+    let param_kind = select_parameter_kind();
+    // クエリパラメーター
+
     // POSTの場合はデータを入力させる
     // 最後にjpを利用して最終的に実行するcurlコマンドの内容を出力
     // 問題なければ実行　問題あれば　該当の箇所の編集ができるようにする
@@ -45,11 +50,13 @@ fn icurl_start() {
 /// ユーザーにURLを入力してもらうメソッド
 /// @return 
 /// 
-fn input_url() -> Result<(), std::io::Stderr> {
+fn input_url() -> Result<usize, std::io::Stderr> {
     let mut input = String::new();
     let url = std::io::stdin().read_line(&mut input);
 
-    Ok(())
+    println!("入力したURL: {:?}", url);
+
+    Ok(url.unwrap())
 }
 
 ///
@@ -94,7 +101,7 @@ fn input_option() -> Result<Vec<String>, ReadlineError> {
 
     loop {
         let readline = rustyline.readline(INPUT_CURL_OPTION);
-        // loopで回す
+
         match readline {
             Ok(readline) => {
                 options.push(readline);
@@ -113,3 +120,8 @@ fn input_option() -> Result<Vec<String>, ReadlineError> {
 
     Ok(options)
 }
+
+///
+/// パラメーターの種類を選択させる
+/// 
+pub fn select_parameter_kind() {}
