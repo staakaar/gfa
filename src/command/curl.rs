@@ -1,29 +1,19 @@
 use std::collections::HashMap;
+use std::process;
 
 use eyre::Result;
 use clap::Parser;
+use rustyline::{DefaultEditor, error::ReadlineError};
 
 /// Struct
 #[derive(Parser)]
 pub struct Curl {
-    url: &'static str,
+    url: String,
     options: Vec<String>,
-    query_params: Vec<HashMap<String, String>>,
+    query_params: HashMap<String, String>,
     // ユーザーの入力によって型がさまざまあるためプログラム上でjsonへパースする
     json_param: String,
 }
-
-/// Url
-#[derive(Parser)]
-pub struct Url {
-    Scheme: String,
-    SubDomain: String,
-    Domain: String,
-    Port: String,
-    /// Endpoint Root
-    Root: String,
-}
-
 
 /// const
 const ICURL_INPUT_URL: &str = r#" \n URLを入力してください"#;
@@ -40,7 +30,6 @@ const INPUT_HTTP_METHOD: &str = r#" \n 利用するHTTPメソッドを選択し�
 const INPUT_CURL_OPTION: &str = r#" \n 利用するオプションを選択してください。"#;
 
 
-
 /// Enum
 
 /// Method
@@ -51,6 +40,7 @@ pub enum Method {
     Put,
     Delete,
 }
+
 /// パラメーターの種類
 #[derive(PartialEq, Clone, Debug)]
 pub enum ParamKind {
@@ -63,10 +53,10 @@ pub enum ParamKind {
 impl Curl {
     fn new(self) -> Self {
         Self {
-            url,
-            options,
-            query_params,
-            json_param,
+            url: self.url,
+            options: self.options,
+            query_params: self.query_params,
+            json_param: self.json_param,
         }
     }
 
@@ -74,8 +64,6 @@ impl Curl {
         /// curlコマンドに必要な値をインタラクティブに入力していく
         Ok(())
     }
-
-    fn build_command(self) -> Result<()> {}
 
     fn icurl_start() {
         println!("{ICURL_INPUT_URL}");
