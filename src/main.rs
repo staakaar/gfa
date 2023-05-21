@@ -1,9 +1,7 @@
 /// use
-use std::process;
 
 use clap::{Parser};
 use command::ICurl;
-use rustyline::{DefaultEditor, error::ReadlineError};
 use eyre::Result;
 
 /// mod
