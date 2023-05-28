@@ -60,8 +60,16 @@ impl Curl {
         }
     }
 
-    pub fn interactive(self) -> Result<()> {
-        /// curlコマンドに必要な値をインタラクティブに入力していく
+    pub fn interactive(&self) -> Result<()> {
+        // url入力
+        Self::icurl_start();
+        let url = Self::input_url();
+        // HTTPメソッドを選択させる
+        let http_method = Self::input_http();
+        // オプション周りを標準出力する
+        let curl_option = Self::input_option();
+        // パラメーターの種類を選択させる
+        let param_kind = Self::select_parameter_kind();
         Ok(())
     }
 
