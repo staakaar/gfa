@@ -1,5 +1,5 @@
 [package]
-name = "gfa"
+name = "icurl"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,3 +9,4 @@ edition = "2021"
 clap = { version = "4.0", features = ["derive"] }
 eyre = "0.6.8"
 rustyline = "11.0.0"
+inquire = "0.6.2"

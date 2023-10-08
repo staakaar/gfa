@@ -6,7 +6,7 @@ use clap::Parser;
 use rustyline::{DefaultEditor, error::ReadlineError};
 
 /// Struct
-#[derive(Parser)]
+#[derive(Parser, Clone, Copy)]
 pub struct Curl {
     url: String,
     options: Vec<String>,
