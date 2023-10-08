@@ -6,15 +6,15 @@ mod curl;
 // @see Subcommand trait
 #[derive(Subcommand)]
 #[command(infer_subcommands = true)]
-pub enum ICurl {
-    Start(curl::Curl)
+pub enum InCurl {
+    Start(curl::CurlCmd)
 }
 
-impl ICurl {
+impl InCurl {
     pub fn run(self) -> Result<()> {
         match self {
             Self::Start(curl) => {
-                curl.interactive();
+                let _ = curl.interactive();
                 Ok(())
             }
         }

@@ -1,18 +1,16 @@
-use std::collections::HashMap;
 use std::process;
 
 use eyre::Result;
+use clap::Subcommand;
 use clap::Parser;
 use rustyline::{DefaultEditor, error::ReadlineError};
 
 /// Struct
-#[derive(Parser, Clone, Copy)]
-pub struct Curl {
-    url: String,
-    options: Vec<String>,
-    query_params: HashMap<String, String>,
-    // ユーザーの入力によって型がさまざまあるためプログラム上でjsonへパースする
-    json_param: String,
+#[derive(Subcommand)]
+#[command(infer_subcommands = true)]
+pub enum CurlCmd {
+    #[command(subcommand)]
+    Interactive(interactive::Cmd)
 }
 
 /// const
@@ -50,17 +48,10 @@ pub enum ParamKind {
 }
 
 /// Impl
-impl Curl {
-    fn new(self) -> Self {
-        Self {
-            url: self.url,
-            options: self.options,
-            query_params: self.query_params,
-            json_param: self.json_param,
-        }
-    }
+impl CurlCmd {
 
-    pub fn interactive(&self) -> Result<()> {
+    #[tokio::main(flavor = "current_thread")]
+    pub async fn interactive(self) -> Result<()> {
         // url入力
         Self::icurl_start();
         let url = Self::input_url();
