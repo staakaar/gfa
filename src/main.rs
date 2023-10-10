@@ -6,6 +6,7 @@ use eyre::Result;
 
 /// mod
 mod command;
+mod common;
 
 #[derive(Parser)]
 struct ICurl {

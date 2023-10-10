@@ -2,13 +2,14 @@ use std::process;
 
 use eyre::Result;
 use clap::Subcommand;
-use clap::Parser;
 use rustyline::{DefaultEditor, error::ReadlineError};
+
+mod interactive;
 
 /// Struct
 #[derive(Subcommand)]
 #[command(infer_subcommands = true)]
-pub enum CurlCmd {
+pub enum Cmd {
     #[command(subcommand)]
     Interactive(interactive::Cmd)
 }
@@ -48,10 +49,15 @@ pub enum ParamKind {
 }
 
 /// Impl
-impl CurlCmd {
+impl Cmd {
 
     #[tokio::main(flavor = "current_thread")]
     pub async fn interactive(self) -> Result<()> {
+
+        match self {
+            Self::Interactive(interactive) => interactive.run().await,
+        }
+        
         // url入力
         Self::icurl_start();
         let url = Self::input_url();
