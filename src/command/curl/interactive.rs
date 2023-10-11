@@ -48,8 +48,14 @@ impl Cmd {
 
         // Authorizationヘッダーの登録
         let authorization_token = Select::new("Do you specify an Authorization header?", common::curl_config::get_authorization()).prompt();
-        // 環境変数を読み込む場合は
+        // 認証情報を .envに定義する or 環境変数を読み込む 認証情報のみをコピペさせて入力したほうがよさそう
         let env_var = env::vars();
+        let filter_env_vars: Vec<String> = env_var.into_iter().filter(|x| x.0.contains("")).map(|x| x.0).collect();
+        let select_var = Select::new("Please select an HTTP method.", filter_env_vars).prompt();
+
+        // postメソッドの場合はbody入力
+        // fileデータを添付する場合
+
     }
 
 }
