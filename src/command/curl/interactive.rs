@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::env;
 use clap::Subcommand;
-use inquire::{InquireError, Select, Text};
+use inquire::{InquireError, Select, Text, required};
 
 use crate::common;
 
@@ -54,9 +54,21 @@ impl Cmd {
         // postメソッドの場合はbody入力
         let payload = String::new();
         if http_ans.unwrap().eq("POST") {
-            let payload_text_key = Text::new("Please input an Payload key").prompt();
-            // エラーの場合はもう一度ループさせる
-            let payload_text_value: = Text::new("Please input an Payload value").prompt();
+            let payload_text = Text::new("Please input an Payload key").with_validator(required!()).prompt();
+            let mut body_map: HashMap<&str, &str> = HashMap::new();
+            let payload_list: Vec<&str> = match payload_text {
+                Ok(x) => {
+                    return x.split_whitespace().collect();
+                }
+                Err(_) 
+            };
+            
+            let mut payload_enum = payload_list.iter().enumerate();
+            while let Some((index, key)) = payload_enum.next() {
+                if let Some((index,value)) = payload_enum.next() {
+                    body_map.insert(key, value);
+                }
+            }
         }
 
         // Authorizationヘッダーの登録
@@ -65,6 +77,7 @@ impl Cmd {
         let env_var = env::vars();
         let filter_env_vars: Vec<String> = env_var.into_iter().filter(|x| x.0.contains("")).map(|x| x.0).collect();
         let select_var = Select::new("Please select an HTTP method.", filter_env_vars).prompt();
+        
 
         // fileデータを添付する場合
 
