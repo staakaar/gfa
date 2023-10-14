@@ -54,13 +54,17 @@ impl Cmd {
         // postメソッドの場合はbody入力
         let payload = String::new();
         if http_ans.unwrap().eq("POST") {
-            let payload_text = Text::new("Please input an Payload key").with_validator(required!()).prompt();
+            let payload_text: Result<String, InquireError>= Text::new("Please input an Payload key").with_validator(required!()).prompt();
+
             let mut body_map: HashMap<&str, &str> = HashMap::new();
-            let payload_list: Vec<&str> = match payload_text {
-                Ok(x) => {
-                    return x.split_whitespace().collect();
+
+            let payload_list: Vec<&str> = match &payload_text {
+                Ok(text) => {
+                    text.split_whitespace().collect::<Vec<_>>().to_vec()
                 }
-                Err(_) 
+                Err(_) => {
+                    std::process::exit(1);
+                }
             };
             
             let mut payload_enum = payload_list.iter().enumerate();
