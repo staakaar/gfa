@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::env;
 use clap::Subcommand;
 use inquire::{InquireError, Select, Text, required};
-
+use serde_json;
 use crate::common;
 
 struct CurlOption<'a> {
@@ -52,11 +52,10 @@ impl Cmd {
         }
 
         // postメソッドの場合はbody入力
-        let payload = String::new();
+        let mut body_map: HashMap<&str, &str> = HashMap::new();
+
         if http_ans.unwrap().eq("POST") {
             let payload_text: Result<String, InquireError>= Text::new("Please input an Payload key").with_validator(required!()).prompt();
-
-            let mut body_map: HashMap<&str, &str> = HashMap::new();
 
             let payload_list: Vec<&str> = match &payload_text {
                 Ok(text) => {
@@ -74,6 +73,9 @@ impl Cmd {
                 }
             }
         }
+
+        // payloadを作成していく
+        let payload = serde_json::json!(&body_map);
 
         // Authorizationヘッダーの登録
         let authorization_token = Select::new("Do you specify an Authorization header?", common::curl_config::get_authorization()).prompt();
