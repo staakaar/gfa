@@ -5,6 +5,10 @@ use inquire::{InquireError, Select, Text, required};
 use serde_json::{self, json};
 use crate::common;
 
+use crate::command::curl;
+use crate::command::curl::http::{Get,};
+use crate::command::curl::http::{Http, HttpMethod};
+
 
 struct CurlOption<'a> {
     protocol: &'a str,
@@ -27,9 +31,20 @@ impl Cmd {
         // プロトコルの指定
         let protocol_ans: Result<&str, InquireError> = Select::new("Please select an protocol name", common::curl_config::get_protocol()).prompt();
 
+        let http_type: HttpMethod = if protocol_ans.unwrap().eq("Get") {
+            HttpMethod::GET(Get {})
+        } else {};
+
+        match http_type {
+            HttpMethod::GET(Get) => Get.exec(),
+            HttpMethod::POST(_) => todo!(),
+            HttpMethod::PUT(_) => todo!(),
+            HttpMethod::DELETE(_) => todo!(),
+        }
+
         // ホスト名の選択
         let host_ans: Result<&str, InquireError> = Select::new("Please select an HOST name", common::curl_config::get_host()).prompt();
-        
+
         let mut host_text: String = "".to_owned();
         if host_ans.unwrap() == "Other" {
             let host_text_ans: Result<String, InquireError> = Text::new("Please select an HOST name").prompt();
