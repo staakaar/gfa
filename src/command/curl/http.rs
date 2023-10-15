@@ -12,12 +12,32 @@ pub enum HttpMethod {
     DELETE(Delete),
 }
 
-struct Get {}
+#[derive(PartialEq, Clone, Debug)]
+pub struct Get {}
+
 impl Http for Get {
     fn exec(&self) {}
 }
 
-struct Post {}
+#[derive(PartialEq, Clone, Debug)]
+pub struct Post {}
+
 impl Http for Post {
+    fn exec(&self) {}
+}
+
+
+#[derive(PartialEq, Clone, Debug)]
+pub struct Put {}
+
+impl Http for Put {
+    fn exec(&self) {}
+}
+
+
+#[derive(PartialEq, Clone, Debug)]
+pub struct Delete {}
+
+impl Http for Delete {
     fn exec(&self) {}
 }

@@ -5,6 +5,7 @@ use clap::Subcommand;
 use rustyline::{DefaultEditor, error::ReadlineError};
 
 mod interactive;
+mod http;
 
 /// Struct
 #[derive(Subcommand)]
