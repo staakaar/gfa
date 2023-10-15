@@ -3,6 +3,7 @@ use eyre::Result;
 
 mod curl;
 
+
 // @see Subcommand trait
 #[derive(Subcommand)]
 #[command(infer_subcommands = true)]

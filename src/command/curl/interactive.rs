@@ -2,8 +2,9 @@ use std::collections::HashMap;
 use std::env;
 use clap::Subcommand;
 use inquire::{InquireError, Select, Text, required};
-use serde_json;
+use serde_json::{self, json};
 use crate::common;
+
 
 struct CurlOption<'a> {
     protocol: &'a str,
@@ -25,7 +26,7 @@ impl Cmd {
     pub async fn run(self) {
         // プロトコルの指定
         let protocol_ans: Result<&str, InquireError> = Select::new("Please select an protocol name", common::curl_config::get_protocol()).prompt();
-        
+
         // ホスト名の選択
         let host_ans: Result<&str, InquireError> = Select::new("Please select an HOST name", common::curl_config::get_host()).prompt();
         
@@ -75,7 +76,8 @@ impl Cmd {
         }
 
         // payloadを作成していく
-        let payload = serde_json::json!(&body_map);
+        let payload = serde_json::to_string(&body_map).unwrap();
+        let payload_json = json!(payload);
 
         // Authorizationヘッダーの登録
         let authorization_token = Select::new("Do you specify an Authorization header?", common::curl_config::get_authorization()).prompt();
