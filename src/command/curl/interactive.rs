@@ -5,8 +5,7 @@ use inquire::{InquireError, Select, Text, required};
 use serde_json::{self, json};
 use crate::common;
 
-use crate::command::curl;
-use crate::command::curl::http::{Get,};
+use crate::command::curl::http::{Get, Post, Put, Delete};
 use crate::command::curl::http::{Http, HttpMethod};
 
 
@@ -31,15 +30,18 @@ impl Cmd {
         // プロトコルの指定
         let protocol_ans: Result<&str, InquireError> = Select::new("Please select an protocol name", common::curl_config::get_protocol()).prompt();
 
-        let http_type: HttpMethod = if protocol_ans.unwrap().eq("Get") {
-            HttpMethod::GET(Get {})
-        } else {};
+        let http_type: HttpMethod = match protocol_ans.unwrap() {
+            "Get" => HttpMethod::GET(Get {}),
+            "Post" => HttpMethod::POST(Post {}),
+            "Put" => HttpMethod::PUT(Put {}),
+            "Delete" => HttpMethod::DELETE(Delete {}),
+        };
 
         match http_type {
             HttpMethod::GET(Get) => Get.exec(),
-            HttpMethod::POST(_) => todo!(),
-            HttpMethod::PUT(_) => todo!(),
-            HttpMethod::DELETE(_) => todo!(),
+            HttpMethod::POST(Post) => Post.exec(),
+            HttpMethod::PUT(Put) => Put.exec(),
+            HttpMethod::DELETE(Delete) => Delete.exec(),
         }
 
         // ホスト名の選択
@@ -75,7 +77,7 @@ impl Cmd {
 
             let payload_list: Vec<&str> = match &payload_text {
                 Ok(text) => {
-                    text.split_whitespace().collect::<Vec<_>>().to_vec()
+                    text.split_whitespace().collect::<Vec<&str>>()
                 }
                 Err(_) => {
                     std::process::exit(1);
@@ -85,7 +87,7 @@ impl Cmd {
             let mut payload_enum = payload_list.iter().enumerate();
             while let Some((index, key)) = payload_enum.next() {
                 if let Some((index,value)) = payload_enum.next() {
-                    body_map.insert(key, value);
+                    &body_map.insert(key, value);
                 }
             }
         }

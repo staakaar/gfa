@@ -16,7 +16,9 @@ pub enum HttpMethod {
 pub struct Get {}
 
 impl Http for Get {
-    fn exec(&self) {}
+    fn exec(&self) {
+        println!("http.rs走っている")
+    }
 }
 
 #[derive(PartialEq, Clone, Debug)]
