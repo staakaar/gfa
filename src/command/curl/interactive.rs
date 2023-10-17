@@ -35,6 +35,7 @@ impl Cmd {
             "Post" => HttpMethod::POST(Post {}),
             "Put" => HttpMethod::PUT(Put {}),
             "Delete" => HttpMethod::DELETE(Delete {}),
+            _ => panic!("Please select an protocol name")
         };
 
         match http_type {
@@ -70,7 +71,7 @@ impl Cmd {
         }
 
         // postメソッドの場合はbody入力
-        let mut body_map: HashMap<&str, &str> = HashMap::new();
+        let mut body_map: HashMap<String, String> = HashMap::new();
 
         if http_ans.unwrap().eq("POST") {
             let payload_text: Result<String, InquireError>= Text::new("Please input an Payload key").with_validator(required!()).prompt();
@@ -87,7 +88,7 @@ impl Cmd {
             let mut payload_enum = payload_list.iter().enumerate();
             while let Some((index, key)) = payload_enum.next() {
                 if let Some((index,value)) = payload_enum.next() {
-                    &body_map.insert(key, value);
+                    body_map.insert(key.to_string(), value.to_string());
                 }
             }
         }
