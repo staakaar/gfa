@@ -30,21 +30,6 @@ impl Cmd {
         // プロトコルの指定
         let protocol_ans: Result<&str, InquireError> = Select::new("Please select an protocol name", common::curl_config::get_protocol()).prompt();
 
-        let http_type: HttpMethod = match protocol_ans.unwrap() {
-            "Get" => HttpMethod::GET(Get {}),
-            "Post" => HttpMethod::POST(Post {}),
-            "Put" => HttpMethod::PUT(Put {}),
-            "Delete" => HttpMethod::DELETE(Delete {}),
-            _ => panic!("Please select an protocol name")
-        };
-
-        match http_type {
-            HttpMethod::GET(Get) => Get.exec(),
-            HttpMethod::POST(Post) => Post.exec(),
-            HttpMethod::PUT(Put) => Put.exec(),
-            HttpMethod::DELETE(Delete) => Delete.exec(),
-        }
-
         // ホスト名の選択
         let host_ans: Result<&str, InquireError> = Select::new("Please select an HOST name", common::curl_config::get_host()).prompt();
 
@@ -59,7 +44,7 @@ impl Cmd {
             }
         }
         println!("{}", host_text);
-        
+
         // ポート選択
         let port_ans: Result<String, InquireError> = Text::new("Please select an PORT name").prompt();
         
@@ -70,26 +55,39 @@ impl Cmd {
             Err(_) => println!("There was an error, please try again"),
         }
 
+        let http_type: HttpMethod = match http_ans.unwrap() {
+            "GET" => HttpMethod::GET(Get {}),
+            "POST" => HttpMethod::POST(Post {}),
+            "PUT" => HttpMethod::PUT(Put {}),
+            "DELETE" => HttpMethod::DELETE(Delete {}),
+            _ => panic!("Please select an protocol name")
+        };
+
+        match http_type {
+            HttpMethod::GET(Get) => Get.exec(),
+            HttpMethod::POST(Post) => Post.exec(),
+            HttpMethod::PUT(Put) => Put.exec(),
+            HttpMethod::DELETE(Delete) => Delete.exec(),
+        }
+
         // postメソッドの場合はbody入力
         let mut body_map: HashMap<String, String> = HashMap::new();
 
-        if http_ans.unwrap().eq("POST") {
-            let payload_text: Result<String, InquireError>= Text::new("Please input an Payload key").with_validator(required!()).prompt();
+        let payload_text: Result<String, InquireError>= Text::new("Please input an Payload key").with_validator(required!()).prompt();
 
-            let payload_list: Vec<&str> = match &payload_text {
-                Ok(text) => {
-                    text.split_whitespace().collect::<Vec<&str>>()
-                }
-                Err(_) => {
-                    std::process::exit(1);
-                }
-            };
-            
-            let mut payload_enum = payload_list.iter().enumerate();
-            while let Some((index, key)) = payload_enum.next() {
-                if let Some((index,value)) = payload_enum.next() {
-                    body_map.insert(key.to_string(), value.to_string());
-                }
+        let payload_list: Vec<&str> = match &payload_text {
+            Ok(text) => {
+                text.split_whitespace().collect::<Vec<&str>>()
+            }
+            Err(_) => {
+                std::process::exit(1);
+            }
+        };
+        
+        let mut payload_enum = payload_list.iter().enumerate();
+        while let Some((index, key)) = payload_enum.next() {
+            if let Some((index,value)) = payload_enum.next() {
+                body_map.insert(key.to_string(), value.to_string());
             }
         }
 

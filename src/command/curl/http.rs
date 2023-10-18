@@ -17,7 +17,7 @@ pub struct Get {}
 
 impl Http for Get {
     fn exec(&self) {
-        println!("http.rs走っている")
+        println!("http.rs GET method")
     }
 }
 
@@ -25,7 +25,9 @@ impl Http for Get {
 pub struct Post {}
 
 impl Http for Post {
-    fn exec(&self) {}
+    fn exec(&self) {
+        println!("http.rs POST method")
+    }
 }
 
 
@@ -33,7 +35,9 @@ impl Http for Post {
 pub struct Put {}
 
 impl Http for Put {
-    fn exec(&self) {}
+    fn exec(&self) {
+        println!("http.rs PUT method")
+    }
 }
 
 
@@ -41,5 +45,7 @@ impl Http for Put {
 pub struct Delete {}
 
 impl Http for Delete {
-    fn exec(&self) {}
+    fn exec(&self) {
+        println!("http.rs Delete method")
+    }
 }
