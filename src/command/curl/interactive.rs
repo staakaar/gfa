@@ -5,8 +5,9 @@ use inquire::{InquireError, Select, Text, required};
 use serde_json::{self, json};
 use crate::common;
 
-use crate::command::curl::http::{Get, Post, Put, Delete};
+use crate::command::curl::http::{Get, Post, Put, Delete, self};
 use crate::command::curl::http::{Http, HttpMethod};
+use crate::command::curl::protocol::{HttpConn, File, Protocol, ProtocolType};
 
 
 struct CurlOption<'a> {
@@ -29,6 +30,17 @@ impl Cmd {
     pub async fn run(self) {
         // プロトコルの指定
         let protocol_ans: Result<&str, InquireError> = Select::new("Please select an protocol name", common::curl_config::get_protocol()).prompt();
+        
+        let protocol_type: ProtocolType = match protocol_ans.unwrap() {
+            "HTTP" => ProtocolType::HTTP(HttpConn {}),
+            "FILE" => ProtocolType::FILE(File {}),
+            _ => panic!("Please select an protocol name")
+        };
+
+        match protocol_type {
+            ProtocolType::HTTP(http) => http.exec(),
+            ProtocolType::FILE(file) => file.exec(),
+        }
 
         // ホスト名の選択
         let host_ans: Result<&str, InquireError> = Select::new("Please select an HOST name", common::curl_config::get_host()).prompt();

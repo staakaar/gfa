@@ -3,15 +3,25 @@ pub trait Protocol {
 }
 
 #[derive(PartialEq, Clone, Debug)]
-pub enum Protocol {
-    HTTP(Http),
+pub enum ProtocolType {
+    HTTP(HttpConn),
     FILE(File),
 }
 
-pub struct Http {}
+#[derive(PartialEq, Clone, Debug)]
+pub struct HttpConn {}
 
-impl Protocol for Http {
+impl Protocol for HttpConn {
     fn exec(&self) {
         println!("httpが選択されました。")
+    }
+}
+
+#[derive(PartialEq, Clone, Debug)]
+pub struct File {}
+
+impl Protocol for File {
+    fn exec(&self) {
+        println!("fileが選択されました。")
     }
 }

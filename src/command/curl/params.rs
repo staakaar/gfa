@@ -1,5 +1,7 @@
-struct Params {
-    params: HashMap<&str, &str>
+use std::collections::HashMap;
+
+struct Params<'a> {
+    params: HashMap<&'a str, &'a str>
 }
 
-impl Params {}
+impl Params<'_> {}

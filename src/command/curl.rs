@@ -6,6 +6,9 @@ use rustyline::{DefaultEditor, error::ReadlineError};
 
 mod interactive;
 mod http;
+mod protocol;
+mod params;
+mod headers;
 
 /// Struct
 #[derive(Subcommand)]
