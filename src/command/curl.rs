@@ -9,6 +9,7 @@ mod http;
 mod protocol;
 mod params;
 mod headers;
+mod options;
 
 /// Struct
 #[derive(Subcommand)]

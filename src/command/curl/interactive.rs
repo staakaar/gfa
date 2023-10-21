@@ -9,17 +9,6 @@ use crate::command::curl::http::{Get, Post, Put, Delete};
 use crate::command::curl::http::{Http, HttpMethod};
 use crate::command::curl::protocol::{HttpConn, File, Protocol, ProtocolType};
 
-
-struct CurlOption<'a> {
-    protocol: &'a str,
-    host_name: String,
-    port: String,
-    http_method: &'a str,
-    authorization: String,
-    query_params: HashMap<&'a str, &'a str>,
-    body: String,
-}
-
 #[derive(Subcommand)]
 #[command(infer_subcommands = true)]
 pub enum Cmd {
@@ -70,12 +59,7 @@ impl Cmd {
         let env_var = env::vars();
         let filter_env_vars: Vec<String> = env_var.into_iter().filter(|x| x.0.contains("")).map(|x| x.0).collect();
         let select_var = Select::new("Please select an HTTP method.", filter_env_vars).prompt();
-        
 
     }
 
-}
-
-impl CurlOption<'_> {
-    pub fn new() {}
 }
