@@ -10,6 +10,7 @@ mod protocol;
 mod params;
 mod headers;
 mod options;
+mod authorization;
 
 /// Struct
 #[derive(Subcommand)]

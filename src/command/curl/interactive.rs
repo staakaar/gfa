@@ -8,6 +8,8 @@ use crate::common;
 use crate::command::curl::http::{Get, Post, Put, Delete};
 use crate::command::curl::http::{Http, HttpMethod};
 use crate::command::curl::protocol::{HttpConn, File, Protocol, ProtocolType};
+use crate::command::curl::params::Params;
+use crate::command::curl::authorization::{Authorization, AuthorizationType, Bearer};
 
 #[derive(Subcommand)]
 #[command(infer_subcommands = true)]
@@ -47,15 +49,28 @@ impl Cmd {
         };
 
         match http_type {
-            HttpMethod::GET(Get) => Get.exec(),
-            HttpMethod::POST(Post) => Post.exec(),
-            HttpMethod::PUT(Put) => Put.exec(),
-            HttpMethod::DELETE(Delete) => Delete.exec(),
+            HttpMethod::GET(get) => get.exec(),
+            HttpMethod::POST(post) => post.exec(),
+            HttpMethod::PUT(put) => put.exec(),
+            HttpMethod::DELETE(delete) => delete.exec(),
         }
 
-        // Authorizationヘッダーの登録
+        // params有無
+        let is_params: Result<&str, InquireError> = Select::new("Set params?", common::curl_config::is_params()).prompt();
+        match is_params.unwrap() {
+            "YES" =>  Params::set(),
+            "NO" => println!("OK"),
+            _ => panic!("Please select yes or no"),
+        }
+
+        // Authorizationヘッダーの有無
         let authorization_token = Select::new("Do you specify an Authorization header?", common::curl_config::get_authorization()).prompt();
-        // 認証情報を .envに定義する or 環境変数を読み込む 認証情報のみをコピペさせて入力したほうがよさそう
+        match authorization_token.unwrap() {
+            "YES" =>  Authorization::check(&Bearer {}),
+            "NO" => println!("OK"),
+            _ => panic!("Please select yes or no"),
+        }
+
         let env_var = env::vars();
         let filter_env_vars: Vec<String> = env_var.into_iter().filter(|x| x.0.contains("")).map(|x| x.0).collect();
         let select_var = Select::new("Please select an HTTP method.", filter_env_vars).prompt();

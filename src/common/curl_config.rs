@@ -19,3 +19,8 @@ pub fn get_authorization() -> Vec<& 'static str> {
     let options: Vec<&str> = vec!["Enter manually", "Read environment variables"];
     options
 }
+
+pub fn is_params() -> Vec<& 'static str> {
+    let options: Vec<&str> = vec!["YES", "NO"];
+    options
+}
