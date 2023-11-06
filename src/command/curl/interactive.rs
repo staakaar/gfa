@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::env;
 use clap::Subcommand;
 use inquire::{InquireError, Select, Text, required};
@@ -10,6 +9,8 @@ use crate::command::curl::http::{Http, HttpMethod};
 use crate::command::curl::protocol::{HttpConn, File, Protocol, ProtocolType};
 use crate::command::curl::params::Params;
 use crate::command::curl::authorization::{Authorization, AuthorizationType, Bearer};
+
+use super::headers::Header;
 
 #[derive(Subcommand)]
 #[command(infer_subcommands = true)]
@@ -62,6 +63,15 @@ impl Cmd {
             "NO" => println!("OK"),
             _ => panic!("Please select yes or no"),
         }
+
+        // header設定
+        let is_header: Result<&str, InquireError> = Select::new("Set params?", common::curl_config::is_params()).prompt();
+        match is_header.unwrap() {
+            "YES" =>  Header::set(),
+            "NO" => println!("OK"),
+            _ => panic!("Please select yes or no"),
+        }
+        // body設定
 
         // Authorizationヘッダーの有無
         let authorization_token = Select::new("Do you specify an Authorization header?", common::curl_config::get_authorization()).prompt();

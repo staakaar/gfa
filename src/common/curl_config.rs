@@ -24,3 +24,8 @@ pub fn is_params() -> Vec<& 'static str> {
     let options: Vec<&str> = vec!["YES", "NO"];
     options
 }
+
+pub fn is_header() -> Vec<& 'static str> {
+    let options: Vec<&str> = vec!["YES", "NO"];
+    options
+}
