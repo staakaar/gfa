@@ -71,6 +71,7 @@ impl Cmd {
             "NO" => println!("OK"),
             _ => panic!("Please select yes or no"),
         }
+
         // body設定
 
         // Authorizationヘッダーの有無

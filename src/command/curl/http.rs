@@ -42,12 +42,12 @@ impl Http for Post {
                 std::process::exit(1);
             }
         };
-        
-        let mut payload_enum = payload_list.iter().enumerate();
-        while let Some((index, key)) = payload_enum.next() {
-            if let Some((index,value)) = payload_enum.next() {
-                body_map.insert(key.to_string(), value.to_string());
-            }
+
+        for i in 0..payload_list.len() / 2 {
+            let key = payload_list[i * 2].to_string();
+            let value = payload_list[i * 2 + 1].to_string();
+
+            body_map.insert(key, value);
         }
 
         // payloadを作成していく
@@ -65,7 +65,25 @@ pub struct Put {}
 
 impl Http for Put {
     fn exec(&self) {
-        println!("http.rs PUT method")
+        let mut body_map: HashMap<String, String> = HashMap::new();
+
+        let payload_text: Result<String, InquireError>= Text::new("Please input an Payload key").with_validator(required!()).prompt();
+
+        let payload_list: Vec<&str> = match &payload_text {
+            Ok(text) => {
+                text.split_whitespace().collect::<Vec<&str>>()
+            }
+            Err(_) => {
+                std::process::exit(1);
+            }
+        };
+
+        for i in 0..payload_list.len() / 2 {
+            let key = payload_list[i * 2].to_string();
+            let value = payload_list[i * 2 + 1].to_string();
+
+            body_map.insert(key, value);
+        }
     }
 }
 
