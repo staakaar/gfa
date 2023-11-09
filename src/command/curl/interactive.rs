@@ -1,6 +1,5 @@
-use std::env;
 use clap::Subcommand;
-use inquire::{InquireError, Select, Text, required};
+use inquire::{InquireError, Select};
 use serde_json::{self, json};
 use crate::common;
 
@@ -81,10 +80,6 @@ impl Cmd {
             "NO" => println!("OK"),
             _ => panic!("Please select yes or no"),
         }
-
-        let env_var = env::vars();
-        let filter_env_vars: Vec<String> = env_var.into_iter().filter(|x| x.0.contains("")).map(|x| x.0).collect();
-        let select_var = Select::new("Please select an HTTP method.", filter_env_vars).prompt();
 
     }
 
