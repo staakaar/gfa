@@ -1,4 +1,5 @@
-
+use std::env;
+use inquire::{Select};
 
 pub trait Authorization {
     fn check(&self);
@@ -13,5 +14,9 @@ pub enum AuthorizationType {
 pub struct Bearer {}
 
 impl Authorization for Bearer {
-    fn check(&self) {}
+    fn check(&self) {
+        let env_var = env::vars();
+        let filter_env_vars: Vec<String> = env_var.into_iter().filter(|x| x.0.contains("")).map(|x| x.0).collect();
+        let select_var = Select::new("Please select an HTTP method.", filter_env_vars).prompt();
+    }
 }
