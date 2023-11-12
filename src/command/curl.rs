@@ -11,6 +11,7 @@ mod params;
 mod headers;
 mod options;
 mod authorization;
+mod curl_input;
 
 /// Struct
 #[derive(Subcommand)]
@@ -34,26 +35,6 @@ const INPUT_HTTP_METHOD: &str = r#" \n 利用するHTTPメソッドを選択し�
 
 const INPUT_CURL_OPTION: &str = r#" \n 利用するオプションを選択してください。"#;
 
-
-/// Enum
-
-/// Method
-#[derive(PartialEq, Clone, Debug)]
-pub enum Method {
-    Get,
-    Post,
-    Put,
-    Delete,
-}
-
-/// パラメーターの種類
-#[derive(PartialEq, Clone, Debug)]
-pub enum ParamKind {
-    Json,
-    File,
-    UrlEncode,
-}
-
 /// Impl
 impl Cmd {
 
@@ -72,7 +53,6 @@ impl Cmd {
         // オプション周りを標準出力する
         let curl_option = Self::input_option();
         // パラメーターの種類を選択させる
-        let param_kind = Self::select_parameter_kind();
         Ok(())
     }
 
@@ -154,9 +134,4 @@ impl Cmd {
     
         Ok(options)
     }
-    
-    ///
-    /// パラメーターの種類を選択させる
-    /// 
-    pub fn select_parameter_kind() {}
 }
