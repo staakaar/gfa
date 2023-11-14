@@ -6,7 +6,7 @@ pub fn get_http_method() -> Vec<& 'static str> {
 }
 
 pub fn get_protocol() -> Vec<& 'static str> {
-    let options: Vec<&str> = vec!["HTTP", "FILE"];
+    let options: Vec<&str> = vec!["HTTP", "GraphQL", "gRPC", "WebSocket"];
     options
 }
 
@@ -17,6 +17,11 @@ pub fn get_host() -> Vec<& 'static str> {
 
 pub fn get_authorization() -> Vec<& 'static str> {
     let options: Vec<&str> = vec!["Enter manually", "Read environment variables"];
+    options
+}
+
+pub fn get_authorization_type() -> Vec<& 'static str> {
+    let options: Vec<&str> = vec!["No Auth", "API Key", "Bearer Token", "JWT Bearer"];
     options
 }
 
