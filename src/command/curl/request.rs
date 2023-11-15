@@ -1,21 +1,21 @@
+use std::collections::HashMap;
 
 
-pub trait Request {
-    fn get(&self);
-    fn post(&self);
-    fn put(&self);
-    fn delete(&self);
-}
+pub struct Request {}
 
-#[tokio::main]
 impl Request {
-    fn get(&self) {
-        let res = reqwest::get().await?.json::<HashMap<String, String>>().await?;
+
+    #[tokio::main]
+    pub async fn get() {
+        let res = reqwest::get("test").await?.json::<HashMap<String, String>>().await?;
     }
 
-    fn post(&self) {}
+    #[tokio::main]
+    pub async fn post() {}
 
-    fn put(&self) {}
+    #[tokio::main]
+    pub async fn put() {}
 
-    fn delete(&self) {}
+    #[tokio::main]
+    pub async fn delete() {}
 }

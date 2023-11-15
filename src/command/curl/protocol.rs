@@ -1,11 +1,13 @@
 use std::cell::Cell;
 use std::collections::HashMap;
 use inquire::{InquireError, Select, Text};
+
 use crate::command::curl::authorization::{Authorization, Bearer};
 use crate::command::curl::headers::Header;
 use crate::command::curl::http::{HttpMethod, Get, Post, Put, Delete, Http};
 use crate::command::curl::params::Params;
 use crate::command::curl::curl_input::CurlInput;
+use crate::command::curl::request::Request;
 use crate::common::curl_config;
 
 pub trait Protocol {
@@ -107,13 +109,20 @@ impl Protocol for HttpConn {
         // Authorizationヘッダーの有無
         let authorization_token = Select::new("Do you specify an Authorization header?", curl_config::get_authorization()).prompt();
         match authorization_token.unwrap() {
-            "YES" =>  Authorization::check(&Bearer {}),
+            "YES" =>  Authorization::select(&Bearer {}),
             "NO" => println!("OK"),
             _ => panic!("Please select yes or no"),
         }
 
         // set request data
         // send request
+        match http_type {
+            HttpMethod::GET => Request::get(),
+            HttpMethod::POST => Request::post(),
+            HttpMethod::PUT => Request::put(),
+            HttpMethod::DELETE => Request::delete(),
+            _ => panic!("Please select an protocol name")
+        };
     }
 }
 
