@@ -116,12 +116,11 @@ impl Protocol for HttpConn {
 
         // set request data
         // send request
-        match http_type {
+        let _ = match http_type {
             HttpMethod::GET => Request::get(),
             HttpMethod::POST => Request::post(),
             HttpMethod::PUT => Request::put(),
             HttpMethod::DELETE => Request::delete(),
-            _ => panic!("Please select an protocol name")
         };
     }
 }
