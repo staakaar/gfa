@@ -16,9 +16,14 @@ pub fn get_host() -> Vec<& 'static str> {
 }
 
 pub fn get_authorization() -> Vec<& 'static str> {
-    let options: Vec<&str> = vec!["Enter manually", "Read environment variables"];
+    let options: Vec<&str> = vec!["Yes", "No"];
     options
 }
+
+// pub fn get_authorization() -> Vec<& 'static str> {
+//     let options: Vec<&str> = vec!["Enter manually", "Read environment variables"];
+//     options
+// }
 
 pub fn get_authorization_type() -> Vec<& 'static str> {
     let options: Vec<&str> = vec!["No Auth", "API Key", "Bearer Token", "JWT Bearer"];
