@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CurlInput {
-    protocol: String,
-    host_name: String,
-    port: String,
-    http_method: String,
-    authorization: String,
-    query_params: HashMap<String, String>,
-    body: String,
+    pub protocol: String,
+    pub host_name: String,
+    pub port: String,
+    pub http_method: String,
+    pub authorization: String,
+    pub query_params: HashMap<String, String>,
+    pub body: String,
 }
 
 impl CurlInput {

@@ -1,9 +1,14 @@
+use std::cell::Cell;
+
+use super::curl_input::CurlInput;
+
 pub struct Request {}
 
 impl Request {
 
     #[tokio::main]
-    pub async fn get() -> Result<(), reqwest::Error> {
+    pub async fn get(curl_input: &mut CurlInput) -> Result<(), reqwest::Error> {
+        println!("{}", curl_input.port);
         let res = reqwest::get("test").await?;
 
         eprintln!("Response: {:?} {}", res.version(), res.status());

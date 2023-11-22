@@ -2,12 +2,12 @@ use std::cell::Cell;
 use std::collections::HashMap;
 use inquire::{InquireError, Select, Text};
 
-use crate::command::curl::authorization::{Authorization, Bearer};
-use crate::command::curl::headers::Header;
-use crate::command::curl::http::{HttpMethod, Get, Post, Put, Delete, Http};
-use crate::command::curl::params::Params;
-use crate::command::curl::curl_input::CurlInput;
-use crate::command::curl::request::Request;
+use crate::command::authorization::{Authorization, Bearer};
+use crate::command::headers::Header;
+use crate::command::http::{HttpMethod, Get, Post, Put, Delete, Http};
+use crate::command::params::Params;
+use crate::command::curl_input::CurlInput;
+use crate::command::request::Request;
 use crate::common::curl_config;
 
 pub trait Protocol {
@@ -19,7 +19,6 @@ pub enum ProtocolType {
     HTTP,
     FILE,
 }
-
 
 pub struct HttpConn {
     curl_option: Cell<CurlInput>
@@ -45,7 +44,8 @@ impl HttpConn {
 
 impl Protocol for HttpConn {
     fn exec() {
-        let curl_input: HttpConn = HttpConn::init();
+        let mut curl_option: HttpConn = HttpConn::init();
+        let curl_input: &mut CurlInput = curl_option.curl_option.get_mut();
 
         // ホスト名の選択
         let host_ans: Result<&str, InquireError> = Select::new("Please select an HOST name", curl_config::get_host()).prompt();
@@ -82,10 +82,10 @@ impl Protocol for HttpConn {
         };
 
         match http_type {
-            HttpMethod::GET => Get::exec(Get { curl_input }),
-            HttpMethod::POST => Post::exec(Post { curl_input }),
-            HttpMethod::PUT => Put::exec(Put { curl_input }),
-            HttpMethod::DELETE => Delete::exec(Delete { curl_input }),
+            HttpMethod::GET => Get::exec(Get {}, curl_input),
+            HttpMethod::POST => Post::exec(Post {}, curl_input),
+            HttpMethod::PUT => Put::exec(Put {}, curl_input),
+            HttpMethod::DELETE => Delete::exec(Delete {}, curl_input),
         };
 
         // params有無
@@ -114,10 +114,9 @@ impl Protocol for HttpConn {
             _ => panic!("Please select yes or no"),
         }
 
-        // set request data
         // send request
         let _ = match http_type {
-            HttpMethod::GET => Request::get(),
+            HttpMethod::GET => Request::get(curl_input),
             HttpMethod::POST => Request::post(),
             HttpMethod::PUT => Request::put(),
             HttpMethod::DELETE => Request::delete(),

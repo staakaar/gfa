@@ -1,7 +1,17 @@
 use clap::Subcommand;
 use eyre::Result;
 
-mod curl;
+mod interactive;
+mod protocol;
+mod http;
+mod params;
+mod headers;
+mod options;
+mod authorization;
+mod curl_input;
+mod request;
+mod request_body;
+
 
 
 // @see Subcommand trait
@@ -9,13 +19,17 @@ mod curl;
 #[command(infer_subcommands = true)]
 pub enum InCurl {
     #[command(subcommand)]
-    Start(curl::Cmd)
+    Start(interactive::Cmd)
 }
 
 impl InCurl {
-    pub fn run(self) -> Result<()> {
+
+    #[tokio::main(flavor = "current_thread")]
+    pub async fn run(self) -> Result<()> {
         match self {
-            Self::Start(curl) => curl.interactive()
+            Self::Start(interactive) => interactive.run().await,
         }
+
+        Ok(())
     }
 }
