@@ -43,7 +43,9 @@ impl Http for Post {
         };
 
         let kvs: Kvs = kvs::Kvs::new();
-        kvs.set(payload_list);
+        let kvs_hash: Kvs = kvs.set(payload_list);
+
+        curl_input.body = kvs_hash.record;
 
         // payloadを作成していく
         // let payload = serde_json::to_string(&kvs.into()).unwrap();

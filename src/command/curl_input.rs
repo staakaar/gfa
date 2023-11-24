@@ -8,7 +8,7 @@ pub struct CurlInput {
     pub http_method: String,
     pub authorization: String,
     pub query_params: HashMap<String, String>,
-    pub body: String,
+    pub body: HashMap<String, String>,
 }
 
 impl CurlInput {
@@ -20,7 +20,7 @@ impl CurlInput {
             http_method: String::new(),
             authorization: String::new(),
             query_params: HashMap::new(),
-            body: String::new(),
+            body: HashMap::new(),
         }
     }
 

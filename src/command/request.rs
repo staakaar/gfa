@@ -1,5 +1,3 @@
-use std::cell::Cell;
-
 use super::curl_input::CurlInput;
 
 pub struct Request {}

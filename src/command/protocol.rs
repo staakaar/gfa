@@ -35,7 +35,7 @@ impl HttpConn {
                     http_method: String::new(),
                     authorization: String::new(),
                     query_params: HashMap::new(),
-                    body: String::new(),
+                    body: HashMap::new(),
                 }
             )
         } 
@@ -91,7 +91,7 @@ impl Protocol for HttpConn {
         // params有無
         let is_params: Result<&str, InquireError> = Select::new("Set params?", curl_config::is_params()).prompt();
         match is_params.unwrap() {
-            "YES" =>  Params::set(),
+            "YES" =>  Params::set(curl_input),
             "NO" => println!("OK"),
             _ => panic!("Please select yes or no"),
         }
