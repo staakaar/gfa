@@ -1,5 +1,4 @@
 use inquire::{InquireError, Text, required};
-use serde_json::{self};
 
 use crate::common::kvs::{self, Kvs};
 
@@ -9,6 +8,7 @@ pub trait Http {
     fn exec(self, curl_input: &mut CurlInput);
 }
 
+#[derive(Debug)]
 pub enum HttpMethod {
     GET,
     POST,
@@ -73,7 +73,8 @@ impl Http for Put {
         };
 
         let kvs: Kvs = kvs::Kvs::new();
-        kvs.set(payload_list);
+        let kvs_hash: Kvs = kvs.set(payload_list);
+        curl_input.body = kvs_hash.record;
     }
 }
 
@@ -94,6 +95,7 @@ impl Http for Delete {
         };
 
         let kvs: Kvs = kvs::Kvs::new();
-        kvs.set(payload_list);
+        let kvs_hash: Kvs = kvs.set(payload_list);
+        curl_input.body = kvs_hash.record;
     }
 }

@@ -109,17 +109,18 @@ impl Protocol for HttpConn {
         // Authorizationヘッダーの有無
         let authorization_token = Select::new("Do you specify an Authorization header?", curl_config::get_authorization()).prompt();
         match authorization_token.unwrap() {
-            "YES" =>  Authorization::select(&Bearer {}),
-            "NO" => println!("OK"),
+            "Yes" =>  Authorization::select(&Bearer {}),
+            "No" => println!("OK"),
             _ => panic!("Please select yes or no"),
         }
 
+        println!("{:?}", http_type);
         // send request
         let _ = match http_type {
             HttpMethod::GET => Request::get(curl_input),
-            HttpMethod::POST => Request::post(),
-            HttpMethod::PUT => Request::put(),
-            HttpMethod::DELETE => Request::delete(),
+            HttpMethod::POST => Request::post(curl_input),
+            HttpMethod::PUT => Request::put(curl_input),
+            HttpMethod::DELETE => Request::delete(curl_input),
         };
     }
 }

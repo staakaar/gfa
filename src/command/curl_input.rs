@@ -23,14 +23,4 @@ impl CurlInput {
             body: HashMap::new(),
         }
     }
-
-    pub fn set_host_name(curl_option: &mut CurlInput, host: String) -> &mut CurlInput {
-        curl_option.host_name = host;
-        return curl_option;
-    }
-
-    pub fn set_port(curl_option: &mut CurlInput, port: String) -> &mut CurlInput {
-        curl_option.port = port;
-        return curl_option;
-    }
 }

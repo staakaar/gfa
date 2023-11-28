@@ -4,7 +4,6 @@ pub struct Request {}
 
 impl Request {
 
-    #[tokio::main]
     pub async fn get(curl_input: &mut CurlInput) -> Result<(), reqwest::Error> {
         println!("{}", curl_input.port);
         let res = reqwest::get("test").await?;
@@ -19,18 +18,25 @@ impl Request {
         Ok(())
     }
 
-    #[tokio::main]
-    pub async fn post() -> Result<(), reqwest::Error> {
+    pub async fn post(curl_input: &mut CurlInput) -> Result<(), reqwest::Error> {
+        println!("{}", curl_input.port);
+        let res = reqwest::get("test").await?;
+        let body = res.text().await?;
         Ok(())
     }
 
-    #[tokio::main]
-    pub async fn put() -> Result<(), reqwest::Error>  {
+    pub async fn put(curl_input: &mut CurlInput) -> Result<(), reqwest::Error>  {
+        println!("{}", curl_input.port);
+        let res = reqwest::get("test").await?;
+        let body = res.text().await?;
         Ok(())
     }
 
-    #[tokio::main]
-    pub async fn delete() -> Result<(), reqwest::Error>  {
+    pub async fn delete(curl_input: &mut CurlInput) -> Result<(), reqwest::Error>  {
+        println!("{}", curl_input.port);
+        let res = reqwest::get("test").await?;
+        let body = res.text().await?;
         Ok(())
     }
+
 }
