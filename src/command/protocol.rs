@@ -1,5 +1,6 @@
 use std::cell::Cell;
 use std::collections::HashMap;
+use async_trait::async_trait;
 use inquire::{InquireError, Select, Text};
 
 use crate::command::authorization::{Authorization, Bearer};
@@ -10,6 +11,7 @@ use crate::command::curl_input::CurlInput;
 use crate::command::request::Request;
 use crate::common::curl_config;
 
+#[async_trait]
 pub trait Protocol {
     fn exec();
 }
@@ -116,11 +118,12 @@ impl Protocol for HttpConn {
 
         println!("{:?}", http_type);
         // send request
-        let _ = match http_type {
+        let _: Result<(), reqwest::Error> = match http_type {
             HttpMethod::GET => Request::get(curl_input),
             HttpMethod::POST => Request::post(curl_input),
             HttpMethod::PUT => Request::put(curl_input),
             HttpMethod::DELETE => Request::delete(curl_input),
+            _ => panic!("test")
         };
     }
 }
