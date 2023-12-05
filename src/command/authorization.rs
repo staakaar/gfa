@@ -1,4 +1,3 @@
-use std::env;
 use inquire::{Select};
 
 use crate::common::curl_config;

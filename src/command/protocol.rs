@@ -1,7 +1,7 @@
 use std::cell::Cell;
 use std::collections::HashMap;
 use async_trait::async_trait;
-use inquire::{InquireError, Select, Text};
+use inquire::{InquireError, Select, Text, required};
 
 use crate::command::authorization::{Authorization, Bearer};
 use crate::command::headers::Header;
@@ -60,13 +60,16 @@ impl Protocol for HttpConn {
                     host_text = input_host_name();
                 },
                 Err(_) => println!("There was an error, please try again"),
-            }
+            };
         }
         println!("{}", host_text);
 
         // ポート選択
         let port_ans: Result<String, InquireError> = Text::new("Please select an PORT name").prompt();
         let port = port_ans.unwrap();
+
+        // url
+        let input_text: Result<String, InquireError>= Text::new("Please input url").with_validator(required!()).prompt();
 
         // HTTPメソッドの選択
         let http_ans: Result<&str, InquireError> = Select::new("Please select an HTTP method.", curl_config::get_http_method()).prompt();
@@ -99,7 +102,7 @@ impl Protocol for HttpConn {
         }
 
         // header設定
-        let is_header: Result<&str, InquireError> = Select::new("Set params?", curl_config::is_params()).prompt();
+        let is_header: Result<&str, InquireError> = Select::new("Set header?", curl_config::is_params()).prompt();
         match is_header.unwrap() {
             "YES" =>  Header::set(),
             "NO" => println!("OK"),
@@ -116,6 +119,10 @@ impl Protocol for HttpConn {
             _ => panic!("Please select yes or no"),
         }
 
+        // curl_input set parameter one by one
+        curl_input.host_name = host_text;
+        curl_input.port = port;
+
         println!("{:?}", http_type);
         // send request
         let _: Result<(), reqwest::Error> = match http_type {
@@ -123,7 +130,6 @@ impl Protocol for HttpConn {
             HttpMethod::POST => Request::post(curl_input),
             HttpMethod::PUT => Request::put(curl_input),
             HttpMethod::DELETE => Request::delete(curl_input),
-            _ => panic!("test")
         };
     }
 }

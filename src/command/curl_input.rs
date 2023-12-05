@@ -12,15 +12,15 @@ pub struct CurlInput {
 }
 
 impl CurlInput {
-    pub fn new() -> CurlInput {
-        CurlInput {
-            protocol: String::new(),
-            host_name: String::new(),
-            port: String::new(),
-            http_method: String::new(),
-            authorization: String::new(),
-            query_params: HashMap::new(),
-            body: HashMap::new(),
-        }
-    }
+    // pub fn new() -> CurlInput {
+    //     CurlInput {
+    //         protocol: String::new(),
+    //         host_name: String::new(),
+    //         port: String::new(),
+    //         http_method: String::new(),
+    //         authorization: String::new(),
+    //         query_params: HashMap::new(),
+    //         body: HashMap::new(),
+    //     }
+    // }
 }

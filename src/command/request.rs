@@ -6,7 +6,7 @@ impl Request {
 
     #[tokio::main]
     pub async fn get(curl_input: &mut CurlInput) -> Result<(), reqwest::Error> {
-        println!("{}", curl_input.port);
+        println!("{:?}", curl_input.port);
         let res = reqwest::get("test").await?;
 
         eprintln!("Response: {:?} {}", res.version(), res.status());
@@ -32,6 +32,8 @@ impl Request {
             .json()
             .await?;
 
+            println!("{:?}", new_post);
+
         Ok(())
     }
 
@@ -40,6 +42,8 @@ impl Request {
         println!("{}", curl_input.port);
         let res = reqwest::get("test").await?;
         let body = res.text().await?;
+
+        println!("{}", body);
         Ok(())
     }
 
@@ -48,6 +52,8 @@ impl Request {
         println!("{}", curl_input.port);
         let res = reqwest::get("test").await?;
         let body = res.text().await?;
+
+        println!("{}", body);
         Ok(())
     }
 
